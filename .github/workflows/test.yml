@@ -1,0 +1,32 @@
+name: test
+
+on:
+  workflow_dispatch:
+    inputs:
+      prop_name:
+        description: 'The name of the gradle property'
+        required: true
+        type: string
+      prop_value:
+        description: 'The value of the gradle property'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set environment variable dynamically
+        shell: bash
+        run: |
+          echo "ORG_GRADLE_PROJECT_${{ inputs.prop_name }}=${{ inputs.prop_value }}" >> $GITHUB_ENV
+
+      - name: Simulate Gradle run
+        run: |
+          echo This a fake Gradle run
+          echo Access to prop1 via ORG_GRADLE_PROJECT_prop1: $ORG_GRADLE_PROJECT_prop1
+
+      - name: Print env
+        run: |
+          env
